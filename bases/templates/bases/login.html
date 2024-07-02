@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MSP | Hial</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="{% static 'plugins/sweetalert2/sweetalert2.min.css' %}">
+
+    <!-- Estilos para el fondo -->
+    <style>
+        body {
+            background-image: url('/static/dist/img/fondomedico.jpg'); /* Reemplaza con la ruta correcta */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <!-- /.login-logo -->
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <img src="{% static 'dist/img/logomsp.png' %}" alt="logomsp" class="img-fluid" style="width: 150px;">
+                <a href="#" class="h1"><b>CITAS</b>MEDICAS</a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Coordinación Zonal 7 Salud<br>
+                    <strong>HOSPITAL GENERAL ISIDRO AYORA</strong><br> <small>Ingrese sus Datos</small>
+                </p>
+
+                <form id="login-form" method="post">
+                    {% csrf_token %}
+
+                    <small class="text-danger">
+                        {% if messages %}
+                            {% for m in messages %}
+                                {{ m }} <br>
+                            {% endfor %}
+                        {% endif %}
+                        {% if form.errors %}
+                            {% for field in form %}
+                                {% if field.errors %}
+                                    {% for error in field.errors %}
+                                        {{ error|escape }} ({{field.name}})<br>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    {{ error|escape }}<br>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </small>
+                    <div class="input-group mb-3">
+                        <input type="email" name="username" id="id_username" autofocus="" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" name="password" id="id_password" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="icheck-primary">
+                                <input type="checkbox" id="remember">
+                                <label for="remember">
+                                    Recuérdame
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-4">
+                            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+
+                <p class="mb-1">
+                    <a href="forgot-password.html">Olvidó su contraseña</a>
+                </p>
+                <p class="mb-0">
+                    <a href="register.html" class="text-center">Registro de pacientes</a>
+                </p>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.login-box -->
+
+    <!-- jQuery -->
+    <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+    <!-- SweetAlert2 -->
+    <script src="{% static 'plugins/sweetalert2/sweetalert2.min.js' %}"></script>
+
+    <!-- Script personalizado para validaciones y alertas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('login-form').addEventListener('submit', function (event) {
+                var email = document.getElementById('id_username').value;
+                var password = document.getElementById('id_password').value;
+
+                if (!email || !password) {
+                    event.preventDefault(); // Evita que se envíe el formulario
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Por favor ingrese su email y contraseña.'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
