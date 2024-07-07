@@ -16,6 +16,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <!-- SweetAlert2 -->
   <link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
   <!-- Toastr -->
@@ -161,11 +165,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <i class="fas fa-expand-arrows-alt"></i>
                     </a>
                 </li>
+                {% if user.is_staff %}
                 <li class="nav-item">
                     <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                        <i class="fas fa-th-large"></i>
+                        <i class="fas fa-users-cog"></i>
                     </a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href="#" id="btnLogout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -221,28 +227,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Starter Pages
-                                    <i class="right fas fa-angle-left"></i>
+                                    Home
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Active Page</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Inactive Page</p>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-medkit"></i>
                                 <p>
                                     Gestión Médica
                                     <i class="right fas fa-angle-left"></i>
@@ -251,13 +242,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fas fa-stethoscope nav-icon"></i>
                                         <p>Especialidades</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fas fa-user-md nav-icon"></i>
                                         <p>Medicos</p>
                                     </a>
                                 </li>
@@ -265,7 +256,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Pacientes
                                 </p>
@@ -273,7 +264,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
+                                <i class="nav-icon fas fa-calendar-alt"></i>
                                 <p>
                                     Citas Médicas
                                 </p>
@@ -281,7 +272,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <i class="nav-icon fas fa-expand-arrows-alt"></i>
                                 <p>
                                     Catálogos
                                     <i class="right fas fa-angle-left"></i>
@@ -290,19 +281,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fas fa-search nav-icon"></i>
                                         <p>Diagnósticos</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Exámenes</p>
-                                    </a>
+                                        <i class="fas fa-microscope nav-icon"></i>
+                                        <p>Exámenes Médicos</p>
+                                    </a> 
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
+                                        <i class="fas fa-pills nav-icon"></i>
                                         <p>Medicamentos</p>
                                     </a>
                                 </li>
@@ -416,8 +407,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
             <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
+                <h5>Administración de Usuarios</h5>
+                <p> <a href="{% url 'bases:users_list' %}" rel="noopener noreferrer"><i class="fas fa-user-lock"></i> Usuarios</a></p>
+                <p> <a href="{% url 'bases:user_groups_list' %}" rel="noopener noreferrer"><i class="fas fa-users"></i> Grupos</a></p>
             </div>
         </aside>
         {% endblock control_sidebar %}
@@ -443,6 +435,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
     <!-- Bootstrap 4 -->
     <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
     <!-- SweetAlert2 -->
     <script src="{% static 'plugins/sweetalert2/sweetalert2.min.js' %}"></script>
     <!-- Toastr -->
@@ -482,8 +487,63 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     contenedor.addClass("active")
                 }
             })
+            $("#tbl").DataTable({
+                "responsive": true, "lengthChange": false, "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#tbl_wrapper .col-md-6:eq(0)');
         })
+
+        function abrir_borrar(desc, url){
+            Swal.fire({
+                title: "¿Borrar?",
+                text: `Se borrará ${desc}`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: `Si, borrar`,
+                cancelButtonText: `No borrar`,
+                allowOutsideClick: false,
+                confirmButtonClass: 'btn btn-danger',
+            }).then((borrar) => {
+                if(borrar.isConfirmed){
+                    var token = "{{ csrf_token }}";
+                    $.ajax({
+                        headers: { "X-CSRFToken": token },
+                        type: "POST",
+                        url: url,
+                        success: function(response){
+                            if(response.status === "OK"){
+                                Swal.fire("Borrado exitoso", "", "success").then(() => {
+                                    location.reload(true);
+                                });
+                            } else {
+                                Swal.fire("Error", "Hubo un error al borrar el registro", "error");
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            Swal.fire("Error", "Hubo un error al borrar el registro", "error");
+                        }
+                    });
+                } else {
+                    Swal.fire("Acción cancelada", "", "info");
+                }
+            });
+        }
+
+
+
+        function mensaje(msg,tipo="info"){
+            var tst  = `toastr.${tipo}('${msg}')`
+            eval(tst)
+        }
+
+        {% if messages %}
+            {% for m in messages %}
+            mensaje("{{m}}","{{ m.tags }}")
+            {% endfor %}
+        {% endif %}
     </script>
+    {% block js %}
+    {% endblock js %}
 </body>
 
 </html>
