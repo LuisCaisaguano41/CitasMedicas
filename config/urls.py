@@ -21,6 +21,8 @@ from django.urls import include, path
 from bases import views
 
 urlpatterns = [
+
+    path('catalogos/',include(('catalogos.urls','catalogos'), namespace='catalogos')),
     path('',include(('bases.urls','bases'), namespace = 'bases')),
     path('admin/', admin.site.urls),
 ]
