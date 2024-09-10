@@ -1,0 +1,115 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="card card-primary">
+            <div class="card-header">
+                {% if obj %}
+                <h3 class="card-title">Editar Médico</h3>
+                {% else %}
+                <h3 class="card-title">Agregar Médico</h3>
+                {% endif %}
+            </div>
+            <!-- /.card-header -->
+            <!-- Formulario Django -->
+            {% if obj %}
+            <form method="POST" role="form" class="needs-validation" novalidate action="{% url 'gestionmedica:medicos_update' obj.pk %}">
+            {% else %}
+            <form method="POST" role="form" class="needs-validation" novalidate action="{% url 'gestionmedica:medicos_add' %}">
+            {% endif %}
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_identificacion">Identificación</label>
+                            <input type="text" name="identificacion" class="form-control" id="id_identificacion" placeholder="Ingrese identificación" value="{% if obj %}{{ obj.identificacion }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese una identificación.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_apellidos">Apellidos</label>
+                            <input type="text" name="apellidos" class="form-control" id="id_apellidos" placeholder="Ingrese apellidos" value="{% if obj %}{{ obj.apellidos }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese apellidos.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_nombres">Nombres</label>
+                            <input type="text" name="nombres" class="form-control" id="id_nombres" placeholder="Ingrese nombres" value="{% if obj %}{{ obj.nombres }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese nombres.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_correo_electronico">Correo Electrónico</label>
+                            <input type="email" name="correo_electronico" class="form-control" id="id_correo_electronico" placeholder="Ingrese correo electrónico" value="{% if obj %}{{ obj.correo_electronico }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese un correo electrónico válido.</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_telefono">Teléfono</label>
+                            <input type="text" name="telefono" class="form-control" id="id_telefono" placeholder="Ingrese teléfono" value="{% if obj %}{{ obj.telefono }}{% endif %}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_direccion">Dirección</label>
+                            <input type="text" name="direccion" class="form-control" id="id_direccion" placeholder="Ingrese dirección" value="{% if obj %}{{ obj.direccion }}{% endif %}">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_ciudad_residencia">Ciudad de Residencia</label>
+                            <input type="text" name="ciudad_residencia" class="form-control" id="id_ciudad_residencia" placeholder="Ingrese ciudad de residencia" value="{% if obj %}{{ obj.ciudad_residencia }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese una ciudad de residencia.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_fecha_nacimiento">Fecha de Nacimiento</label>
+                            <!--<input type="date" name="fecha_nacimiento" class="form-control" id="id_fecha_nacimiento" value="{% if form.fecha_nacimiento.value %}{{ form.fecha_nacimiento.value }}{% endif %}" required>
+                            <div class="invalid-feedback">Por favor ingrese una fecha de nacimiento.</div>-->
+                            {{ form.fecha_nacimiento }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="id_genero">Género</label>
+                            <select name="genero" class="form-control" id="id_genero" required>
+                                <option value="" disabled {% if not obj %}selected{% endif %}>Seleccione género</option>
+                                <option value="Masculino" {% if obj and obj.genero == 'Masculino' %}selected{% endif %}>MASCULINO</option>
+                                <option value="Femenino" {% if obj and obj.genero == 'Femenino' %}selected{% endif %}>FEMENINO</option>
+                                <option value="Otro" {% if obj and obj.genero == 'Otro' %}selected{% endif %}>OTRO</option>
+                            </select>
+                            <div class="invalid-feedback">Por favor seleccione un género.</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="id_especialidad">Especialidad</label>
+                            <select name="especialidad" class="form-control" id="id_especialidad" required>
+                                <option value="" disabled {% if not obj %}selected{% endif %}>Seleccione especialidad</option>
+                                {% for especialidad in especialidades %}
+                                <option value="{{ especialidad.id }}" {% if obj and obj.especialidad == especialidad %}selected{% endif %}>{{ especialidad.nombre }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Por favor seleccione una especialidad.</div>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="id_estado" name="estado" {% if obj and obj.estado %}checked{% endif %}>
+                        <label class="form-check-label" for="id_estado">Activo</label>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+            <!-- /.form -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var fechaNacimientoInput = document.getElementById('id_fecha_nacimiento');
+        var today = new Date().toISOString().split('T')[0];
+        fechaNacimientoInput.setAttribute('max', today);
+    });
+</script>

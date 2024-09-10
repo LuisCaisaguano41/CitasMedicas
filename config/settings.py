@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bases',
     'catalogos',
+    'gestionmedica',
+    'pacientes',
 ]
 
 AUTHENTICATION_BACKENDS = [

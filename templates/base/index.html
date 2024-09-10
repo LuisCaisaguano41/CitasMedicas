@@ -21,9 +21,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
     <link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
     <!-- SweetAlert2 -->
-  <link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
-  <!-- Toastr -->
-  <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{% static 'plugins/toastr/toastr.min.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
 </head>
@@ -227,7 +227,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="{% url 'bases:home' %}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Home
+                                    Inicio
                                 </p>
                             </a>
                         </li>
@@ -241,13 +241,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'gestionmedica:especialidades_list' %}" class="nav-link">
                                         <i class="fas fa-stethoscope nav-icon"></i>
                                         <p>Especialidades</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'gestionmedica:medicos_list' %}" class="nav-link">
                                         <i class="fas fa-user-md nav-icon"></i>
                                         <p>Medicos</p>
                                     </a>
@@ -255,7 +255,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{% url 'pacientes:pacientes_list' %}" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     Pacientes
@@ -286,13 +286,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'catalogos:examen_list' %}" class="nav-link">
                                         <i class="fas fa-microscope nav-icon"></i>
                                         <p>Exámenes Médicos</p>
                                     </a> 
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{% url 'catalogos:medicamento_list' %}" class="nav-link">
                                         <i class="fas fa-pills nav-icon"></i>
                                         <p>Medicamentos</p>
                                     </a>
@@ -572,56 +572,52 @@ scratch. This page gets rid of all links and provides the needed markup only.
         }
 
 
-        $(document).ready(function() {
-            $('.activar-desactivar-btn').click(function() {
-                var diagnosticoId = $(this).data('id');
-                var activar = !$(this).hasClass('btn-warning');  // Si tiene clase btn-warning, es para desactivar
-        
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: '¿Quieres cambiar el estado del diagnóstico?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, cambiar estado',
-                    cancelButtonText: 'Cancelar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        activarDesactivarDiagnostico(diagnosticoId, activar);
-                    }
-                });
-            });
-        
-            function activarDesactivarDiagnostico(diagnosticoId, activar) {
-                $.ajax({
-                    url: "{% url 'catalogos:activar_desactivar_diagnostico' 0 %}".replace('0', diagnosticoId),  // Utiliza la URL reversa
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    success: function(response) {
-                        var estado = response.estado;
-                        var mensaje = estado ? 'Diagnóstico activado.' : 'Diagnóstico desactivado.';
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Hecho!',
-                            text: mensaje
-                        }).then(function() {
-                            location.reload();  // Recargar la página para reflejar el cambio
-                        });
-                    },
-                    error: function(xhr, errmsg, err) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Ocurrió un error al procesar la solicitud.'
-                        });
-                    }
-                });
-            }
-        });
+        $(document).on('click', '.activar-desactivar-btn', function() {
+            const objetoId = $(this).data('id');
+            const appLabel = $(this).data('app');
+            const modelName = $(this).data('model');
+            const estadoActual = $(this).data('estado');
+            const activar = !estadoActual;
 
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Quieres cambiar el estado del objeto?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, cambiar estado',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/${appLabel}/${modelName}/activar-desactivar/${objetoId}/`,
+                        type: 'POST',
+                        data: {
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        success: function(response) {
+                            const estado = response.estado;
+                            const mensaje = estado ? 'Objeto activado.' : 'Objeto desactivado.';
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Hecho!',
+                                text: mensaje
+                            }).then(function() {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr, errmsg, err) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Ocurrió un error al procesar la solicitud.'
+                            });
+                        }
+                    });
+                }
+            });
+        });
         
     </script>
     {% endblock %}

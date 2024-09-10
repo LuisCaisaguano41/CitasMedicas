@@ -46,14 +46,14 @@
                             <td>{{ i.nombre }}</td>
                             <td>
                                 {% if i.estado %}
-                                    <span class="badge badge-info">Activo</span>
+                                    <span class="badge badge-success">Activo</span>
                                 {% else %}
                                     <span class="badge badge-danger">Inactivo</span>
                                 {% endif %}
                             </td>
                             <td>
                                 <button onclick="return abrir_modal('{% url 'catalogos:diagnostico_update' i.id %}')" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i> Editar</button>
-                                <button class="btn btn-xs btn-danger activar-desactivar-btn" data-id="{{ i.id }}">
+                                <button class="btn btn-xs btn-danger activar-desactivar-btn" data-id="{{ i.id }}" data-app="catalogos" data-model="diagnosticos" data-estado="{{ i.estado }}">
                                     {% if i.estado %}
                                         Desactivar
                                     {% else %}
@@ -72,56 +72,6 @@
 
 <!-- diagnosticos_list.html -->
 
-<script>
-    $(document).ready(function() {
-        $('.activar-desactivar-btn').click(function() {
-            var diagnosticoId = $(this).data('id');
-            var activar = !$(this).hasClass('btn-warning');  // Si tiene clase btn-warning, es para desactivar
-    
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: '¿Quieres cambiar el estado del diagnóstico?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, cambiar estado',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    activarDesactivarDiagnostico(diagnosticoId, activar);
-                }
-            });
-        });
-    
-        function activarDesactivarDiagnostico(diagnosticoId, activar) {
-            $.ajax({
-                url: "{% url 'catalogos:activar_desactivar_diagnostico' 0 %}".replace('0', diagnosticoId),  // Utiliza la URL reversa
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    var estado = response.estado;
-                    var mensaje = estado ? 'Diagnóstico activado.' : 'Diagnóstico desactivado.';
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Hecho!',
-                        text: mensaje
-                    }).then(function() {
-                        location.reload();  // Recargar la página para reflejar el cambio
-                    });
-                },
-                error: function(xhr, errmsg, err) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Ocurrió un error al procesar la solicitud.'
-                    });
-                }
-            });
-        }
-    });
-</script>
+
     
 {% endblock content %}
