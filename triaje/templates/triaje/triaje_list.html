@@ -1,0 +1,91 @@
+{% extends 'base/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Listado de Triaje</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Listado de Triaje</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+{% endblock content_wrapper %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <a href="#" onclick="return abrir_modal('{% url 'triajes:triaje_add' %}')" class="btn btn-success">
+                    <span class="fa fa-calendar-plus"></span> Nuevo
+                </a>
+            </div>
+            <div class="card-body">
+                <table id="tbl" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Paciente</th>
+                            <th>F Nacimiento</th>
+                            <th>Genero</th>
+                            <th>FC</th>
+                            <th>FR</th>
+                            <th>PA</th>
+                            <th>Temp</th>
+                            <th>SO</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for i in obj %}
+                        <tr>
+                            <td>{{ i.fecha_triaje|date:"d/m/Y" }}</td>
+                            <td>{{ i.paciente.nombres }} {{ i.paciente.apellidos }}</td>
+                            <td>{{ i.paciente.fecha_nacimiento|date:"d/m/Y" }}</td>
+                            <td>{{ i.paciente.genero }}</td>
+                            <td>{{ i.frecuencia_cardiaca }}</td>
+                            <td>{{ i.frecuencia_respiratoria }}</td>
+                            <td>{{ i.presion_arterial_min }} - {{ i.presion_arterial_max }}</td>
+                            <td>{{ i.temperatura_corporal }}</td>
+                            <td>{{ i.spo2 }}</td>
+                            <td>{{ i.prioridad }}</td>
+                            <td>
+                                {% if i.estado %}
+                                    <span class="badge badge-success">Activo</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button onclick="return abrir_modal('{% url 'triajes:triaje_update' i.id %}')" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-xs activar-desactivar-btn {% if i.estado %}btn-danger{% else %}btn-success{% endif %}" data-id="{{ i.id }}" data-app="triajes" data-model="triaje" data-estado="{{ i.estado }}">
+                                    {% if i.estado %}
+                                        <i class="fas fa-thumbs-down"></i>
+                                    {% else %}
+                                        <i class="fas fa-thumbs-up"></i>
+                                    {% endif %}
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- diagnosticos_list.html -->
+
+
+    
+{% endblock content %}

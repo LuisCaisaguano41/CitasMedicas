@@ -21,7 +21,8 @@ from django.urls import include, path
 from bases import views
 
 urlpatterns = [
-
+    path('triajes/', include(('triaje.urls', 'triajes'), namespace = 'triajes')),
+    path('citasmedicas/', include(('citasmedicas.urls', 'citasmedicas'), namespace = 'citasmedicas')),
     path('pacientes/', include(('pacientes.urls', 'pacientes'), namespace = 'pacientes')),
     path('gestionmedica/', include(('gestionmedica.urls', 'gestionmedica'), namespace = 'gestionmedica')),
     path('catalogos/',include(('catalogos.urls','catalogos'), namespace = 'catalogos')),

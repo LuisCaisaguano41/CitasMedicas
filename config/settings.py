@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'catalogos',
     'gestionmedica',
     'pacientes',
+    'citasmedicas',
+    'triaje',
 ]
 
 AUTHENTICATION_BACKENDS = [

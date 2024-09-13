@@ -4,7 +4,7 @@ from django.utils.http import quote
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from .managers import UsuarioManager
+from .managers import UsuarioManager 
 
 # Create your models here.
 class Usuario(AbstractBaseUser, PermissionsMixin):
