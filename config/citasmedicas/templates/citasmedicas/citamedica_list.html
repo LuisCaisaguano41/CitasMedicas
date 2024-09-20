@@ -1,0 +1,80 @@
+{% extends 'base/index.html' %}
+
+{% block content_wrapper %}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Listado de Citas Médicas</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{% url 'bases:home' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Listado de Citas Médicas</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+{% endblock content_wrapper %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <a href="#" onclick="" class="btn btn-success">
+                    <span class="fa fa-calendar-plus"></span> Nueva Cita
+                </a>
+            </div>
+            <div class="card-body">
+                <table id="tbl" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Hora</th>
+                            <th>Especialidad</th>
+                            <th>Médico</th>
+                            <th>Paciente</th>
+                            <th>Edad</th>
+                            <th>Motivo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in obj %}
+                        <tr>
+                            <td>{{ cita.id }}</td>
+                            <td>{{ cita.hora }}</td>
+                            <td>{{ cita.especialidad.nombre }}</td>
+                            <td>{{ cita.medico.apellidos }} {{ cita.medico.nombres }}</td>
+                            <td>{{ cita.paciente.apellidos }} {{ cita.paciente.nombres }}</td>
+                            <td>{{ cita.edad }}</td>
+                            <td>{{ cita.motivo }}</td>
+                            <td>
+                                {% if cita.estado %}
+                                    <span class="badge badge-success">Activo</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button onclick="" class="btn btn-xs btn-warning"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-xs activar-desactivar-btn {% if cita.estado %}btn-danger{% else %}btn-success{% endif %}" data-id="{{ cita.id }}" data-app="gestionmedica" data-model="citamedica" data-estado="{{ cita.estado }}">
+                                    {% if cita.estado %}
+                                        <i class="fas fa-thumbs-down"></i>
+                                    {% else %}
+                                        <i class="fas fa-thumbs-up"></i>
+                                    {% endif %}
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
